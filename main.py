@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 # To find the Maximum Independent set (MIS)
-def graph_sets(graph):  # To define Sets of the graph
+def graph_sets(graph) -> list:  # To define Sets of the graph
     if len(graph) == 0:  # The graph has no vertex
         return []
     if len(graph) == 1:  # The graph has 1 vertex
