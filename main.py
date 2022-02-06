@@ -14,7 +14,7 @@ def main():
 
     draw_graph(graph_from_file, mis)
 
-    print(f"Размер mis = {len(mis)}")
+    print(f"Размер mis = {len(mis)}")  # f-string f"Размер mis = {len(mis)}"
     print(f"Содержимое mis = {mis}")
 
 
@@ -25,7 +25,12 @@ def get_list_edges(filename):
     :param filename: файл с edges
     :return: Список списков, где вложенный список это пара узлов
     """
-    with open(filename) as file:
+    # file = open(filename)
+    # file.close()
+    # ==
+    # with open(filename) as file:
+
+    with open(filename) as file:  # with менеджер контекста
         list_edges = []
         for line in file:
             line = line.rstrip()
