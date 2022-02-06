@@ -1,27 +1,38 @@
-import networkx as nx
+import networkx as nx  # pip install networkx
 import matplotlib.pyplot as plt
 
+from mis_solver import graph_sets
 
-# To find the Maximum Independent set (MIS)
-def graph_sets(graph) -> list:  # To define Sets of the graph
-    if len(graph) == 0:  # The graph has no vertex
-        return []
-    if len(graph) == 1:  # The graph has 1 vertex
-        return list(graph.nodes)
-    current_vertex = list(graph.nodes)[0]  # To select a current vertex (CV) from the graph
 
-    graph2 = graph.copy()  # Copy graph. To use Removing method
-    graph2.remove_node(current_vertex)  # To delete a CV from the graph
+def main():
+    filename = "src_graph.txt"
+    list_edges = get_list_edges(filename)
 
-    res1 = graph_sets(graph2)  # Recursive call (RC) receives a maximal set. RC assumes CV, that isn't selected
+    graph_from_file = nx.Graph()
+    graph_from_file.add_edges_from(list_edges)
+    mis = graph_sets(graph_from_file)
 
-    for neighbour in graph.neighbors(current_vertex):  # To use Considering method. The selected vertex as part of Maximal set
-        if neighbour in graph2:  # To delete neighbor from the current subgraph
-            graph2.remove_node(neighbour)
+    draw_graph(graph_from_file, mis)
 
-    res2 = [current_vertex] + graph_sets(graph2)  # Sum of VC and res1
+    print(f"Размер mis = {len(mis)}")
+    print(f"Содержимое mis = {mis}")
 
-    return max(res1, res2, key=len)  # To return the result that is bigger
+
+def get_list_edges(filename):
+    """
+    Считали граф из файла
+
+    :param filename: файл с edges
+    :return: Список списков, где вложенный список это пара узлов
+    """
+    with open(filename) as file:
+        list_edges = []
+        for line in file:
+            line = line.rstrip()
+            split_values = line.split()
+            list_edges.append(split_values)
+
+        return list_edges
 
 
 def draw_graph(graph, max_independent_set):
@@ -39,31 +50,4 @@ def draw_graph(graph, max_independent_set):
 
 
 if __name__ == '__main__':
-    graph = nx.Graph()
-    graph.add_edges_from(
-        [(1, 2),  # The edges
-         (1, 10),
-         (1, 10),
-         (1, 11),
-         (2, 3),
-         (2, 11),
-         (3, 4),
-         (3, 11),
-         (4, 5),
-         (4, 11),
-         (5, 6),
-         (5, 11),
-         (6, 7),
-         (6, 11),
-         (7, 8),
-         (7, 11),
-         (8, 9),
-         (8, 11),
-         (9, 10),
-         (1, 11)]
-    )
-
-    maximal_independent_set = graph_sets(graph)  # RC finds all vertices in MIS
-    draw_graph(graph, maximal_independent_set)
-    for i in maximal_independent_set:  # To output the result
-        print(i, end=" ")
+    main()
